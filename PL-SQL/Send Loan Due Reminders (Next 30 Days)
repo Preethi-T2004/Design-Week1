@@ -1,0 +1,14 @@
+DECLARE
+  v_due_date   DATE;
+  v_customer_id NUMBER;
+  v_name       VARCHAR2(100);
+BEGIN
+  FOR rec IN (
+    SELECT l.due_date, l.customer_id, c.name
+    FROM loans l
+    JOIN customers c ON l.customer_id = c.customer_id
+    WHERE l.due_date <= SYSDATE + 30
+  ) LOOP
+    DBMS_OUTPUT.PUT_LINE('Reminder: ' || rec.name || 
+                         ', your loan is due on ' || TO_CHAR(rec.due_date, 'DD-MON-YYYY'));
+  END LOOP;
