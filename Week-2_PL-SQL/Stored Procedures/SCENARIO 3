@@ -1,26 +1,40 @@
-CREATE OR REPLACE PROCEDURE UpdateEmployeeBonus(
-    deptName IN VARCHAR2,
-    bonusPercent IN NUMBER
+CREATE OR REPLACE PROCEDURE TransferFunds(
+    fromAccount IN NUMBER,
+    toAccount IN NUMBER,
+    amount IN NUMBER
 ) IS
+    fromBal NUMBER;
 BEGIN
-    FOR rec IN (
-        SELECT EmployeeID, Salary 
-        FROM Employees 
-        WHERE Department = deptName
-    ) LOOP
-        UPDATE Employees
-        SET Salary = Salary + (rec.Salary * bonusPercent / 100)
-        WHERE EmployeeID = rec.EmployeeID;
+    -- Lock source account row and get balance
+    SELECT Balance INTO fromBal 
+    FROM Accounts 
+    WHERE AccountID = fromAccount 
+    FOR UPDATE;
 
-        DBMS_OUTPUT.PUT_LINE('✅ Bonus applied to EmployeeID: ' || rec.EmployeeID);
-    END LOOP;
+    -- Check if balance is enough
+    IF fromBal < amount THEN
+        DBMS_OUTPUT.PUT_LINE('❌ Not enough funds in AccountID ' || fromAccount);
+        RETURN;
+    END IF;
+
+    -- Deduct from sender
+    UPDATE Accounts
+    SET Balance = Balance - amount,
+        LastModified = SYSDATE
+    WHERE AccountID = fromAccount;
+
+    -- Add to receiver
+    UPDATE Accounts
+    SET Balance = Balance + amount,
+        LastModified = SYSDATE
+    WHERE AccountID = toAccount;
+
+    DBMS_OUTPUT.PUT_LINE('✅ Transferred ₹' || amount || ' from AccountID ' || fromAccount || ' to AccountID ' || toAccount);
 END;
 /
 SET SERVEROUTPUT ON;
 
 BEGIN
-    -- Apply 10% bonus to HR department
-    UpdateEmployeeBonus('HR', 10);
+    TransferFunds(101, 102, 2000); -- Transfer ₹2000 from 101 → 102
 END;
 /
-SELECT * FROM Employees;
