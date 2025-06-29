@@ -1,0 +1,13 @@
+CREATE TABLE Accounts (
+    AccountID NUMBER PRIMARY KEY,
+    CustomerID NUMBER,
+    AccountType VARCHAR2(20), -- 'Savings' or 'Checking'
+    Balance NUMBER,
+    LastModified DATE
+);
+-- Customer 1 has two accounts
+INSERT INTO Accounts VALUES (101, 1, 'Savings', 10000, SYSDATE);
+INSERT INTO Accounts VALUES (102, 1, 'Checking', 5000, SYSDATE);
+
+-- Customer 2 has one account
+INSERT INTO Accounts VALUES (103, 2, 'Savings', 3000, SYSDATE);
