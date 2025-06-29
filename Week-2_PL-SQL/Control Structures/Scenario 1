@@ -1,10 +1,18 @@
+SET SERVEROUTPUT ON;
 BEGIN
-  FOR rec IN (SELECT customer_id, interest_rate FROM customers WHERE age > 60) LOOP
-    UPDATE customers
-    SET interest_rate = interest_rate - 1
-    WHERE customer_id = rec.customer_id;
-  END LOOP;
-  COMMIT;
-  DBMS_OUTPUT.PUT_LINE('Discount applied to senior citizens.');
+    FOR rec IN (
+        SELECT c.CustomerID, l.LoanID, l.InterestRate,
+               TRUNC(MONTHS_BETWEEN(SYSDATE, c.DOB)/12) AS Age
+        FROM Customers c
+        JOIN Loans l ON c.CustomerID = l.CustomerID
+    ) LOOP
+        IF rec.Age > 60 THEN
+            UPDATE Loans
+            SET InterestRate = InterestRate - 1
+            WHERE LoanID = rec.LoanID;
+
+            DBMS_OUTPUT.PUT_LINE('Discount applied to CustomerID: ' || rec.CustomerID || ' (Age: ' || rec.Age || ')');
+        END IF;
+    END LOOP;
 END;
 /
