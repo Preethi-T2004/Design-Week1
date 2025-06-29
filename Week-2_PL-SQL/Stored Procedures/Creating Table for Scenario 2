@@ -1,0 +1,12 @@
+CREATE TABLE Employees (
+    EmployeeID NUMBER PRIMARY KEY,
+    Name VARCHAR2(100),
+    Position VARCHAR2(50),
+    Salary NUMBER,
+    Department VARCHAR2(50),
+    HireDate DATE
+);
+INSERT INTO Employees VALUES (1, 'Alice', 'Manager', 60000, 'HR', TO_DATE('2015-01-01', 'YYYY-MM-DD'));
+INSERT INTO Employees VALUES (2, 'Bob', 'Clerk', 30000, 'HR', TO_DATE('2017-03-15', 'YYYY-MM-DD'));
+INSERT INTO Employees VALUES (3, 'Charlie', 'Developer', 50000, 'IT', TO_DATE('2018-06-20', 'YYYY-MM-DD'));
+INSERT INTO Employees VALUES (4, 'David', 'Tester', 45000, 'QA', TO_DATE('2019-08-01', 'YYYY-MM-DD'));
