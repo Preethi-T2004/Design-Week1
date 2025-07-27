@@ -1,0 +1,28 @@
+TASK 1: firstreactapp
+
+Create a simple React app with a heading.
+
+ COMMAND PROMPT:
+npx create-react-app firstreactapp
+cd firstreactapp
+npm start
+
+VSCODE :
+ src/App.js
+import React from 'react';
+
+function App() {
+  return (
+    <div>
+      <h1>Welcome to the first session of React</h1>
+    </div>
+  );
+}
+export default App;
+
+OUTPUT :
+
+Welcome to the first session of React
+
+
+
